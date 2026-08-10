@@ -1,0 +1,8 @@
+# Exact Python 3.12 quality-tool environment used by CI.
+-r requirements-lock.txt
+iniconfig==2.3.0
+packaging==26.3
+pluggy==1.6.0
+Pygments==2.20.0
+pytest==9.1.1
+ruff==0.16.2

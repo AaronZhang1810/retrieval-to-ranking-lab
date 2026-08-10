@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "Leakage-Aware Two-Stage Recommender Lab"
+type: software
+authors:
+  - family-names: Zhang
+    given-names: Jihuan
+version: 0.2.0
+license: MIT
+abstract: >-
+  A repeatable MovieLens 100K benchmark for weighted-SVD candidate retrieval,
+  guarded pairwise learning-to-rank, and leakage-aware offline evaluation.

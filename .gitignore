@@ -1,0 +1,27 @@
+# Python environments, bytecode, and tool caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local editor and operating-system state
+.DS_Store
+.idea/
+.vscode/
+.RData
+.Rhistory
+.Rproj.user/
+
+# MovieLens data is downloaded locally under separate GroupLens terms.
+# It must never be redistributed from this repository.
+data/raw/
+data/ml-100k/
+*.zip
+
+# Generated aggregate, row-level, and serialized local artifacts. The public
+# reports live at REPORT.md and docs/index.html instead.
+artifacts/

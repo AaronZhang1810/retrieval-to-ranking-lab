@@ -1,0 +1,3 @@
+# Exact runtime environment used for the checked reference implementation.
+# Regenerate deliberately when changing the supported NumPy baseline.
+numpy==2.2.6

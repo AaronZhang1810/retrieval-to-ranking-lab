@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release-check:
+    name: Public-release boundary
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Audit the working tree release boundary
+        run: python public_release.py --check
+      - name: Audit the exact Git index and complete history
+        run: python public_release.py --check --staged --history
+
+  unittest:
+    name: unittest · Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+      - name: Install runtime dependencies
+        run: "python -m pip install --only-binary=:all: -r requirements-lock.txt"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Run unittest suite
+        run: python -m unittest discover -s tests -v
+
+  quality:
+    name: Ruff and pytest
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-dev-lock.txt
+      - name: Install locked development environment
+        run: "python -m pip install --only-binary=:all: -r requirements-dev-lock.txt"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Lint
+        run: python -m ruff check .
+      - name: Run suite through pytest
+        run: python -m pytest
+
+  dependency-audit:
+    name: Dependency audit · OSV
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-audit-lock.txt
+      - name: Install the exact dependency-audit toolchain
+        run: "python -m pip install --only-binary=:all: -r requirements-audit-lock.txt"
+      - name: Check audit-tool dependency consistency
+        run: python -m pip check
+      - name: Audit locked runtime dependencies
+        run: >-
+          python -m pip_audit --vulnerability-service osv --no-deps --disable-pip
+          -r requirements-lock.txt
+      - name: Audit locked development dependencies
+        run: >-
+          python -m pip_audit --vulnerability-service osv --no-deps --disable-pip
+          -r requirements-dev-lock.txt
+      - name: Audit the audit-tool lock itself
+        run: >-
+          python -m pip_audit --vulnerability-service osv --no-deps --disable-pip
+          -r requirements-audit-lock.txt

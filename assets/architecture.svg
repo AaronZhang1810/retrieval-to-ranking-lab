@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="470" viewBox="0 0 1200 470" role="img" aria-labelledby="title desc">
+  <title id="title">Two-stage MovieLens recommendation benchmark architecture</title>
+  <desc id="desc">MovieLens ratings are split into frozen history and later outcomes. Weighted SVD retrieves 200 candidates, a guarded RankNet reranks them to ten, and development-test later outcomes supply offline metrics.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071713"/><stop offset="1" stop-color="#12362e"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".25"/></filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0l10 5-10 5z" fill="#ff855f"/></marker>
+  </defs>
+  <rect width="1200" height="470" rx="26" fill="url(#bg)"/>
+  <text x="48" y="54" fill="#75e3c2" font-family="ui-monospace,monospace" font-size="13" font-weight="700" letter-spacing="2">DECLARED OFFLINE EVALUATION CONTRACT</text>
+  <text x="48" y="92" fill="#eef8f4" font-family="Georgia,serif" font-size="30" font-weight="700">From 100,000 real ratings to an auditable top-10 slate</text>
+
+  <g filter="url(#shadow)">
+    <rect x="48" y="130" width="220" height="222" rx="18" fill="#102923" stroke="#31584d"/>
+    <text x="70" y="164" fill="#75e3c2" font-family="ui-monospace,monospace" font-size="12" font-weight="700">MOVIELENS 100K</text>
+    <text x="70" y="204" fill="#fff" font-family="Georgia,serif" font-size="28" font-weight="700">943 user records</text>
+    <text x="70" y="235" fill="#b2c7c0" font-family="system-ui,sans-serif" font-size="15">1,682 movies · explicit ratings</text>
+    <line x1="70" y1="259" x2="246" y2="259" stroke="#31584d"/>
+    <text x="70" y="291" fill="#fff" font-family="system-ui,sans-serif" font-size="15" font-weight="700">79,619 earlier ratings</text>
+    <text x="70" y="315" fill="#b2c7c0" font-family="system-ui,sans-serif" font-size="13">fit history-only features</text>
+    <text x="70" y="340" fill="#f8cf67" font-family="system-ui,sans-serif" font-size="15" font-weight="700">20,381 later ratings</text>
+  </g>
+
+  <path d="M278 241H336" fill="none" stroke="#ff855f" stroke-width="3" marker-end="url(#arrow)"/>
+  <g filter="url(#shadow)">
+    <rect x="350" y="130" width="220" height="222" rx="18" fill="#102923" stroke="#31584d"/>
+    <text x="372" y="164" fill="#75e3c2" font-family="ui-monospace,monospace" font-size="12" font-weight="700">STAGE 1 · RETRIEVAL</text>
+    <text x="372" y="204" fill="#fff" font-family="Georgia,serif" font-size="28" font-weight="700">Weighted SVD</text>
+    <text x="372" y="235" fill="#b2c7c0" font-family="system-ui,sans-serif" font-size="15">positive-preference matrix</text>
+    <text x="372" y="276" fill="#d8eee7" font-family="ui-monospace,monospace" font-size="14">A ≈ UᵣΣᵣVᵣᵀ</text>
+    <text x="372" y="303" fill="#d8eee7" font-family="ui-monospace,monospace" font-size="14">s¹(u,i)=pᵤᵀqᵢ</text>
+    <rect x="372" y="319" width="176" height="1" fill="#31584d"/>
+    <text x="372" y="342" fill="#f8cf67" font-family="system-ui,sans-serif" font-size="15" font-weight="700">1,682 → K=200</text>
+  </g>
+
+  <path d="M580 241H638" fill="none" stroke="#ff855f" stroke-width="3" marker-end="url(#arrow)"/>
+  <g filter="url(#shadow)">
+    <rect x="652" y="130" width="244" height="222" rx="18" fill="#102923" stroke="#31584d"/>
+    <text x="674" y="164" fill="#75e3c2" font-family="ui-monospace,monospace" font-size="12" font-weight="700">STAGE 2 · RANKING</text>
+    <text x="674" y="204" fill="#fff" font-family="Georgia,serif" font-size="28" font-weight="700">Guarded RankNet</text>
+    <text x="674" y="235" fill="#b2c7c0" font-family="system-ui,sans-serif" font-size="14">6 inspectable history features</text>
+    <text x="674" y="268" fill="#d8eee7" font-family="ui-monospace,monospace" font-size="13">L=log(1+exp(−y·wᵀΔx))</text>
+    <text x="674" y="295" fill="#d8eee7" font-family="ui-monospace,monospace" font-size="13">s²=(1−α)·z(s¹)+α·wᵀx̃</text>
+    <rect x="674" y="319" width="198" height="1" fill="#31584d"/>
+    <text x="674" y="342" fill="#f8cf67" font-family="system-ui,sans-serif" font-size="15" font-weight="700">200 → top 10</text>
+  </g>
+
+  <path d="M906 241H964" fill="none" stroke="#ff855f" stroke-width="3" marker-end="url(#arrow)"/>
+  <g filter="url(#shadow)">
+    <rect x="978" y="130" width="174" height="222" rx="18" fill="#102923" stroke="#31584d"/>
+    <text x="1000" y="164" fill="#75e3c2" font-family="ui-monospace,monospace" font-size="12" font-weight="700">DEVELOPMENT TEST</text>
+    <text x="1000" y="204" fill="#fff" font-family="Georgia,serif" font-size="21" font-weight="700">Test group</text>
+    <text x="1000" y="232" fill="#b2c7c0" font-family="system-ui,sans-serif" font-size="12">later outcomes excluded</text>
+    <text x="1000" y="248" fill="#b2c7c0" font-family="system-ui,sans-serif" font-size="12">from ranker tuning</text>
+    <text x="1000" y="276" fill="#fff" font-family="system-ui,sans-serif" font-size="14" font-weight="700">NDCG · Recall</text>
+    <text x="1000" y="300" fill="#fff" font-family="system-ui,sans-serif" font-size="14" font-weight="700">HitRate · MRR</text>
+    <text x="1000" y="326" fill="#fff" font-family="system-ui,sans-serif" font-size="14" font-weight="700">User bootstrap</text>
+  </g>
+
+  <rect x="48" y="386" width="1104" height="42" rx="12" fill="#0a211b" stroke="#31584d"/>
+  <text x="67" y="412" fill="#b2c7c0" font-family="system-ui,sans-serif" font-size="14">Fixed candidate gate · same development-test users and outcomes · primary end-to-end metrics · paired user-bootstrap uncertainty</text>
+</svg>

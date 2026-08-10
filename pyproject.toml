@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=83"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "two-stage-recommender-lab"
+version = "0.2.0"
+description = "Leakage-aware weighted-SVD retrieval and guarded pairwise ranking on MovieLens 100K"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Jihuan Zhang" }]
+dependencies = ["numpy>=1.26,<3"]
+
+[tool.setuptools.packages.find]
+include = ["recsys_lab*"]
+
+# The test suite is written with unittest. Pytest discovers and runs the same
+# TestCase classes, which gives contributors either workflow without duplicate
+# configuration files.
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = ["-ra", "--strict-config", "--strict-markers"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 110
+extend-exclude = ["artifacts", "data"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
