@@ -1,8 +1,6 @@
 """MovieLens 100K parsing and leakage-aware temporal splits.
 
-The public repository does not redistribute MovieLens data.  Run
-``python download_data.py --accept-license`` before loading this module's
-default dataset path.  Dataset terms and citation details live in DATA.md.
+The public repository does not redistribute MovieLens data. Run ``python download_data.py --accept-license`` before loading this module's default dataset path. Dataset terms and citation details live in DATA.md.
 """
 
 from __future__ import annotations
@@ -107,10 +105,7 @@ def _release_year(title: str, release_date: str) -> float:
 def load_movielens(data_dir: str | Path = DEFAULT_DATA_DIR) -> MovieLensData:
     """Load MovieLens 100K's ``u.data`` and ``u.item`` files.
 
-    The parser intentionally ignores demographic fields.  User and item IDs are
-    represented by numbered IDs; internal arrays are remapped to dense zero-based
-    indices while the source identifiers are retained for local diagnostics.  The
-    absence of names is not treated as proof of anonymity.
+    The parser intentionally ignores demographic fields. User and item IDs are represented by numbered IDs; internal arrays are remapped to dense zero-based indices while the source identifiers are retained for local diagnostics. The absence of names is not treated as proof of anonymity.
     """
 
     data_dir = Path(data_dir)
@@ -187,10 +182,7 @@ def chronological_split(
 ) -> TemporalSplit:
     """Create a deterministic per-user history/outcome split.
 
-    Ratings are ordered by timestamp, with movie index as a deterministic tie
-    breaker because MovieLens records may share a one-second timestamp.  A user
-    enters ranker/evaluation splits only when the held-out suffix contains at
-    least one relevant rating (>=4) and at least two distinct rating levels.
+    Ratings are ordered by timestamp, with movie index as a deterministic tie breaker because MovieLens records may share a one-second timestamp. A user enters ranker/evaluation splits only when the held-out suffix contains at least one relevant rating (>=4) and at least two distinct rating levels.
     """
 
     if not 0.05 <= holdout_fraction <= 0.50:
@@ -229,8 +221,7 @@ def chronological_split(
         if np.any(later_values >= 4.0) and len(np.unique(later_values)) >= 2:
             eligible.append(user)
 
-    # Positive preference strength for weighted SVD; low ratings remain in the seen
-    # mask but do not become positive implicit-feedback mass.
+    # Positive preference strength for weighted SVD; low ratings remain in the seen mask but do not become positive implicit-feedback mass.
     history_values = np.maximum(history_ratings.astype(float) - 2.5, 0.0)
     eligible_users = np.asarray(eligible, dtype=int)
     return TemporalSplit(

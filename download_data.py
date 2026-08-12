@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """Download MovieLens 100K after explicit acceptance of its usage terms.
 
-The dataset is not licensed by this repository.  This script downloads the
-archive directly from GroupLens, verifies a pinned digest, and extracts it with
-strict path and size checks.  See DATA.md before running it.
+The dataset is not licensed by this repository. This script downloads the archive directly from GroupLens, verifies a pinned digest, and extracts it with strict path and size checks. See DATA.md before running it.
 """
 
 from __future__ import annotations
@@ -31,8 +29,7 @@ ARCHIVE_URL = "https://files.grouplens.org/datasets/movielens/ml-100k.zip"
 TERMS_URL = "https://files.grouplens.org/datasets/movielens/ml-100k-README.txt"
 ALLOWED_DOWNLOAD_HOSTS = {"files.grouplens.org"}
 
-# GroupLens publishes this MD5 next to the archive. SHA-256 is independently
-# pinned here after downloading that exact official 4,924,029-byte object.
+# GroupLens publishes this MD5 next to the archive. SHA-256 is independently pinned here after downloading that exact official 4,924,029-byte object.
 ARCHIVE_MD5 = "0e33842e24a9c977be4e0107933c0723"
 ARCHIVE_SHA256 = "50d2a982c66986937beb9ffb3aa76efe955bf3d5c6b761f4e3a7cd717c6a3229"
 ARCHIVE_SIZE_BYTES = 4_924_029
@@ -58,9 +55,7 @@ EXTRACTED_FILE_SHA256 = {
     "u.info": "5b0a40b2e47a729ee6203063f6dcf8790c2e63f5a18663e6ee318a72c5f3c27b",
     "u.item": "553841ebc7de3a0fd0d6b62a204ea30c1e651aacfb2814c7a6584ac52f2c5701",
 }
-# Fingerprint produced by ``recsys_lab.data.load_movielens`` from the exact
-# pinned ``u.data`` and ``u.item`` files above.  Public reports must match it;
-# this catches a data change between pre-run validation and parsing.
+# Fingerprint produced by ``recsys_lab.data.load_movielens`` from the exact pinned ``u.data`` and ``u.item`` files above. Public reports must match it; this catches a data change between pre-run validation and parsing.
 OFFICIAL_PARSED_FINGERPRINT = (
     "ec3f1ed75ed74ee8ed7a7aa17efbcd206de908383c04d8424ee5de6a585dbb05"
 )
@@ -119,8 +114,7 @@ def validate_download_url(url: str) -> None:
 
 def file_digest(path: Path, algorithm: str = "sha256") -> str:
     """Return a streaming hexadecimal digest for *path*."""
-    # MD5 is checked only to match GroupLens's published legacy checksum; the
-    # SHA-256 pin is the security-relevant digest.
+    # MD5 is checked only to match GroupLens's published legacy checksum; the SHA-256 pin is the security-relevant digest.
     digest = hashlib.md5(usedforsecurity=False) if algorithm == "md5" else hashlib.new(algorithm)
     with path.open("rb") as handle:
         for chunk in iter(lambda: handle.read(COPY_CHUNK_BYTES), b""):
@@ -196,9 +190,7 @@ def safe_extract_zip(
 ) -> Path:
     """Extract a ZIP without ``extractall`` and return its expected root.
 
-    Paths, duplicate/case-colliding names, symlinks, encryption, compression
-    methods, member sizes, aggregate size, and suspicious ratios are validated
-    before the first output file is written.
+    Paths, duplicate/case-colliding names, symlinks, encryption, compression methods, member sizes, aggregate size, and suspicious ratios are validated before the first output file is written.
     """
     destination.mkdir(parents=True, exist_ok=True)
     destination_resolved = destination.resolve()

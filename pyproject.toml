@@ -15,9 +15,7 @@ dependencies = ["numpy>=1.26,<3"]
 [tool.setuptools.packages.find]
 include = ["recsys_lab*"]
 
-# The test suite is written with unittest. Pytest discovers and runs the same
-# TestCase classes, which gives contributors either workflow without duplicate
-# configuration files.
+# The test suite is written with unittest. Pytest discovers and runs the same TestCase classes, which gives contributors either workflow without duplicate configuration files.
 [tool.pytest.ini_options]
 minversion = "8.0"
 testpaths = ["tests"]

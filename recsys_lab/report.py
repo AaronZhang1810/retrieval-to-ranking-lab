@@ -53,10 +53,7 @@ def markdown_report(manifest: dict[str, Any]) -> str:
         "",
         "## Executive result",
         "",
-        f"The benchmark uses **{data['ratings']:,} ratings from {data['users']:,} numbered user records "
-        f"across {data['movies']:,} movies**. A per-user timestamp-ordered split freezes "
-        f"{data['history_ratings']:,} history ratings and holds out {data['heldout_ratings']:,} later ratings. "
-        f"The development-test evaluation contains {data['test_users']:,} users whose later outcomes were never used to fit or tune the ranker.",
+        f"The benchmark uses **{data['ratings']:,} ratings from {data['users']:,} numbered user records across {data['movies']:,} movies**. A per-user timestamp-ordered split freezes {data['history_ratings']:,} history ratings and holds out {data['heldout_ratings']:,} later ratings. The development-test evaluation contains {data['test_users']:,} users whose later outcomes were never used to fit or tune the ranker.",
         "",
         "| Method | NDCG@10 | Recall@10 | HitRate@10 | Catalog coverage@10 |",
         "|---|---:|---:|---:|---:|",
@@ -71,30 +68,18 @@ def markdown_report(manifest: dict[str, Any]) -> str:
         "",
         "\\*The ceiling sorts candidates with held-out labels and is not deployable. It measures headroom inside the candidate set.",
         "",
-        f"NDCG, recall, and hit rate are macro-averages over {data['test_users']:,} development-test users. "
-        f"Catalog coverage is the fraction of all {data['movies']:,} movies appearing in their top-10 slates.",
+        f"NDCG, recall, and hit rate are macro-averages over {data['test_users']:,} development-test users. Catalog coverage is the fraction of all {data['movies']:,} movies appearing in their top-10 slates.",
         "",
-        f"The guarded Stage-2 point estimate changed NDCG@10 by **{delta['estimate']:+.4f}** "
-        f"(paired user percentile-bootstrap 95% interval **[{delta['ci_low']:+.4f}, {delta['ci_high']:+.4f}]**; "
-        f"{int(delta['clusters'])} users, {int(delta['replicates']):,} resamples). {_decision(delta)}",
+        f"The guarded Stage-2 point estimate changed NDCG@10 by **{delta['estimate']:+.4f}** (paired user percentile-bootstrap 95% interval **[{delta['ci_low']:+.4f}, {delta['ci_high']:+.4f}]**; {int(delta['clusters'])} users, {int(delta['replicates']):,} resamples). {_decision(delta)}",
         "",
         "## What the experiment found",
         "",
-        f"1. **The candidate gate is a material hard limit.** At `K={config['candidate_k']}`, mean per-user "
-        f"candidate recall was {_pct(metrics['retrieval']['candidate_recall_at_k'])} for held-out movies rated 4–5 stars. "
-        "A reranker cannot recover relevant movies outside that gate.",
-        f"2. **Pairwise accuracy did not guarantee end-to-end lift.** The unblended RankNet reached "
-        f"{_pct(ranker['test_pair_accuracy'])} accuracy on sampled development-test pairs, while its end-to-end NDCG@10 point estimate was "
-        f"{metrics['unblended_ranker']['ndcg_at_10']:.4f} versus {metrics['retrieval']['ndcg_at_10']:.4f} for weighted SVD.",
-        f"3. **The post-hoc judged-only diagnostic answers a narrower question.** Among users with at least two later-rated "
-        f"Stage-1 candidates, candidate-restricted judged NDCG@10 changed from "
-        f"{judged['retrieval']['ndcg_at_10']:.4f} to {judged['unblended_ranker']['ndcg_at_10']:.4f}. "
-        "That point estimate has no interval and is intentionally secondary: it conditions on both later rating and Stage-1 selection.",
-        f"4. **A validation-selected coefficient constrained the challenger.** The final score uses `α={ranker['selected_blend_alpha']:.3f}` "
-        "from the configuration-declared 0–0.10 grid. This bounds the learned score's coefficient but does not guarantee preservation of any fixed fraction of Stage-1 positions.",
+        f"1. **The candidate gate is a material hard limit.** At `K={config['candidate_k']}`, mean per-user candidate recall was {_pct(metrics['retrieval']['candidate_recall_at_k'])} for held-out movies rated 4–5 stars. A reranker cannot recover relevant movies outside that gate.",
+        f"2. **Pairwise accuracy did not guarantee end-to-end lift.** The unblended RankNet reached {_pct(ranker['test_pair_accuracy'])} accuracy on sampled development-test pairs, while its end-to-end NDCG@10 point estimate was {metrics['unblended_ranker']['ndcg_at_10']:.4f} versus {metrics['retrieval']['ndcg_at_10']:.4f} for weighted SVD.",
+        f"3. **The post-hoc judged-only diagnostic answers a narrower question.** Among users with at least two later-rated Stage-1 candidates, candidate-restricted judged NDCG@10 changed from {judged['retrieval']['ndcg_at_10']:.4f} to {judged['unblended_ranker']['ndcg_at_10']:.4f}. That point estimate has no interval and is intentionally secondary: it conditions on both later rating and Stage-1 selection.",
+        f"4. **A validation-selected coefficient constrained the challenger.** The final score uses `α={ranker['selected_blend_alpha']:.3f}` from the configuration-declared 0–0.10 grid. This bounds the learned score's coefficient but does not guarantee preservation of any fixed fraction of Stage-1 positions.",
         "",
-        "This is a useful inconclusive result: it shows why a plausible reranker must be evaluated through "
-        "the candidate gate with the primary end-to-end offline endpoint, rather than promoted from pairwise accuracy alone.",
+        "This is a useful inconclusive result: it shows why a plausible reranker must be evaluated through the candidate gate with the primary end-to-end offline endpoint, rather than promoted from pairwise accuracy alone.",
         "",
         "## Candidate-width trade-off",
         "",
@@ -109,15 +94,11 @@ def markdown_report(manifest: dict[str, Any]) -> str:
         )
     lines += [
         "",
-        "Increasing `K` improves candidate recall but linearly increases rich feature evaluation. The SVD top-10 "
-        "does not change with `K`; the curve exposes the coverage/cost boundary the reranker inherits. "
-        "This is an exploratory development-test curve and was not used to select `K`.",
+        "Increasing `K` improves candidate recall but linearly increases rich feature evaluation. The SVD top-10 does not change with `K`; the curve exposes the coverage/cost boundary the reranker inherits. This is an exploratory development-test curve and was not used to select `K`.",
         "",
         "## Model and validation",
         "",
-        "Stage 1 applies a low-rank decomposition to positive preference mass from the frozen history. Stage 2 "
-        "fits a linear RankNet/Bradley–Terry objective on later, observed higher-vs-lower rating pairs from "
-        "rank-training users. All features are computed from the frozen history:",
+        "Stage 1 applies a low-rank decomposition to positive preference mass from the frozen history. Stage 2 fits a linear RankNet/Bradley–Terry objective on later, observed higher-vs-lower rating pairs from rank-training users. All features are computed from the frozen history:",
         "",
         "| Feature | Standardized weight |",
         "|---|---:|",
@@ -126,10 +107,7 @@ def markdown_report(manifest: dict[str, Any]) -> str:
         lines.append(f"| {name} | {float(weight):+.4f} |")
     lines += [
         "",
-        f"Regularization was selected on {data['rank_validation_users']:,} validation users; the selected "
-        f"`λ={ranker['selected_l2']}` produced {_pct(ranker['validation_pair_accuracy'])} validation-pair accuracy. "
-        "The blend was then selected on end-to-end validation NDCG@10 using the same validation group. "
-        "Those validation scores are selection criteria, not unbiased performance estimates. Development-test later outcomes were used only for reporting.",
+        f"Regularization was selected on {data['rank_validation_users']:,} validation users; the selected `λ={ranker['selected_l2']}` produced {_pct(ranker['validation_pair_accuracy'])} validation-pair accuracy. The blend was then selected on end-to-end validation NDCG@10 using the same validation group. Those validation scores are selection criteria, not unbiased performance estimates. Development-test later outcomes were used only for reporting.",
         "",
         "## Leakage and evaluation contract",
         "",
@@ -166,8 +144,7 @@ def markdown_report(manifest: dict[str, Any]) -> str:
     lines += [
         "- RESULTS.json is the canonical aggregate result; row-level outputs and derived model state stay local",
         "",
-        "Run `python download_data.py --accept-license && python run_demo.py --publish-reports` to regenerate the checked reports. Dataset terms and "
-        "citation are in [DATA.md](DATA.md); model derivations are in [MATH.md](MATH.md).",
+        "Run `python download_data.py --accept-license && python run_demo.py --publish-reports` to regenerate the checked reports. Dataset terms and citation are in [DATA.md](DATA.md); model derivations are in [MATH.md](MATH.md).",
         "",
         "## Limitations and next experiment",
         "",
@@ -177,15 +154,11 @@ def markdown_report(manifest: dict[str, Any]) -> str:
         "- The candidate-restricted judged diagnostic is post hoc, selection-biased, and not the primary endpoint.",
         "- This is a development benchmark, not a preregistered confirmatory study.",
         "",
-        "The next useful experiment is impression-aware training with randomized exposure or propensity information. "
-        "That could help distinguish unexposed movies from exposed non-engagement and align reranker training "
-        "more closely with the evaluated policy distribution.",
+        "The next useful experiment is impression-aware training with randomized exposure or propensity information. That could help distinguish unexposed movies from exposed non-engagement and align reranker training more closely with the evaluated policy distribution.",
         "",
         "## Data acknowledgment",
         "",
-        "This analysis uses the MovieLens 100K dataset from GroupLens Research. The University of Minnesota and "
-        "GroupLens do not endorse this project. Code is MIT-licensed; MovieLens data is governed separately and is "
-        "not redistributed here.",
+        "This analysis uses the MovieLens 100K dataset from GroupLens Research. The University of Minnesota and GroupLens do not endorse this project. Code is MIT-licensed; MovieLens data is governed separately and is not redistributed here.",
     ]
     return "\n".join(lines) + "\n"
 

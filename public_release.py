@@ -63,9 +63,7 @@ PUBLIC_GITHUB_FILES = {
     ".github/workflows/pages.yml",
 }
 
-# A release scan must prove completeness as well as absence of forbidden files.
-# Optional future files may remain allowlisted above, but these files define the
-# minimum reviewable, reproducible portfolio repository.
+# A release scan must prove completeness as well as absence of forbidden files. Optional future files may remain allowlisted above, but these files define the minimum reviewable, reproducible portfolio repository.
 REQUIRED_PUBLIC_FILES = {
     ".gitattributes",
     ".github/REPOSITORY_METADATA.md",
@@ -131,8 +129,7 @@ PUBLIC_TEXT_SUFFIXES = {
 
 PUBLIC_BINARY_SUFFIXES = {".gif", ".ico", ".jpeg", ".jpg", ".png", ".webp"}
 
-# Binary report assets require a deliberate, reviewed source change. Add the
-# relative path and SHA-256 only after checking the image itself and its metadata.
+# Binary report assets require a deliberate, reviewed source change. Add the relative path and SHA-256 only after checking the image itself and its metadata.
 APPROVED_BINARY_SHA256: dict[str, str] = {}
 
 FORBIDDEN_DIRECTORY_NAMES = {
@@ -187,8 +184,7 @@ FORBIDDEN_SUFFIXES = {
 MAX_FILE_BYTES = 5 * 1024 * 1024
 MAX_CANDIDATE_BYTES = 20 * 1024 * 1024
 
-# MovieLens is acquired locally under GroupLens's separate terms. These names
-# must not appear as reachable Git paths, even if a later commit deleted them.
+# MovieLens is acquired locally under GroupLens's separate terms. These names must not appear as reachable Git paths, even if a later commit deleted them.
 MOVIELENS_DATA_NAMES = {
     "allbut.pl",
     "mku.sh",
@@ -393,8 +389,7 @@ def _content_findings(relative: Path, raw: bytes) -> list[Finding]:
             findings.append(
                 Finding("invalid-binary-format", portable, "RIFF file is not a WebP image")
             )
-        # This catches uncompressed metadata. The digest approval remains the
-        # authoritative review boundary for content hidden by compression.
+        # This catches uncompressed metadata. The digest approval remains the authoritative review boundary for content hidden by compression.
         text = raw.decode("latin-1", errors="ignore")
     else:
         if b"\x00" in raw:

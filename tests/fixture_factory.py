@@ -19,11 +19,7 @@ def write_movielens_fixture(
 ) -> Path:
     """Write small ``u.data`` and ``u.item`` files with MovieLens 100K schemas.
 
-    Each user has 20--25 timestamped ratings.  The suffix always contains at
-    least two rating levels and a 4/5-star observation, while history lengths
-    vary enough to exercise activity slices in the end-to-end experiment.
-    Rows are intentionally written in reverse chronological blocks; production
-    code must sort them rather than rely on file order.
+    Each user has 20--25 timestamped ratings. The suffix always contains at least two rating levels and a 4/5-star observation, while history lengths vary enough to exercise activity slices in the end-to-end experiment. Rows are intentionally written in reverse chronological blocks; production code must sort them rather than rely on file order.
     """
 
     if n_users < 15:
@@ -64,8 +60,7 @@ def write_movielens_fixture(
             timestamp = base_timestamp + user_offset * 10_000 + step * 10
             events.append((user_id, item_id, rating, timestamp))
 
-    # The official file is not guaranteed to be time ordered.  Reverse blocks
-    # make a parser/split that accidentally trusts input order fail loudly.
+    # The official file is not guaranteed to be time ordered. Reverse blocks make a parser/split that accidentally trusts input order fail loudly.
     events.reverse()
     lines = [f"{user}\t{item}\t{rating}\t{timestamp}" for user, item, rating, timestamp in events]
     (directory / "u.data").write_text("\n".join(lines) + "\n", encoding="ascii")

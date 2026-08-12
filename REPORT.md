@@ -82,7 +82,7 @@ eligible users ──→ rank-train / validation / development-test (disjoint)
 - Result schema: `1`
 - Python `3.12.5`; NumPy `2.2.6`
 - Local descriptive runtime: `4.82` seconds
-- Executable source-tree SHA-256: `a162c070fb47791bd2e8f7196f294f2d0443878bc54a6ddeb7c90dcd2d4d4a2d`
+- Executable source-tree SHA-256: `f4369f7333593201046f6b4d69ce52ebf15171b8afcd9d3f534c3cded74e0df1`
 - Runtime-lock SHA-256: `573749f545b2b39ae2f35dbcb5d42416f36f75eaff2af8ca941b528757390ec3`
 - RESULTS.json is the canonical aggregate result; row-level outputs and derived model state stay local
 

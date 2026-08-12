@@ -27,8 +27,7 @@ class RetrievalModel:
         k = min(k, int(np.isfinite(score).sum()))
         if k <= 0:
             return np.array([], dtype=int), np.array([], dtype=float)
-        # This lab already performs an exact scan, so a full lexicographic sort
-        # makes score ties deterministic by ascending item ID, including at K.
+        # This lab already performs an exact scan, so a full lexicographic sort makes score ties deterministic by ascending item ID, including at K.
         idx = np.lexsort((np.arange(len(score)), -score))
         idx = idx[np.isfinite(score[idx])][:k]
         return idx, score[idx]
@@ -62,11 +61,7 @@ def fit_retrieval(
 ) -> RetrievalModel:
     """Fit a positive-preference latent-factor retriever.
 
-    MovieLens ratings above 2.5 provide positive preference mass.  All historical
-    ratings—including low ones—remain excluded at serving through ``seen``.  Each
-    row is log-scaled, item-frequency weighted, and L2 normalized before a low-rank
-    approximation.  The production analogue would index item factors in an ANN
-    service; this compact benchmark scores the full catalog exactly.
+    MovieLens ratings above 2.5 provide positive preference mass. All historical ratings—including low ones—remain excluded at serving through ``seen``. Each row is log-scaled, item-frequency weighted, and L2 normalized before a low-rank approximation. The production analogue would index item factors in an ANN service; this compact benchmark scores the full catalog exactly.
     """
     interactions = np.asarray(interactions, dtype=float)
     positive = interactions > 0
