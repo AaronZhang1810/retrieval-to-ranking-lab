@@ -14,6 +14,7 @@ concurrency:
 
 jobs:
   build:
+    if: vars.ENABLE_GITHUB_PAGES == 'true'
     name: Validate and package Pages artifact
     permissions:
       contents: read

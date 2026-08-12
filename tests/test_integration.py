@@ -237,7 +237,6 @@ class RealDataIntegrationTests(unittest.TestCase):
             self.assertIn("MovieLens 100K", content)
             self.assertIn("NDCG@10", content)
             self.assertIn("held-out", content.lower())
-            self.assertNotIn("700001", content)
             self.assertNotIn("Am\u00e9lie Fixture", content)
             self.assertNotIn("Fixture Movie", content)
             self.assertNotIn(str(self.root), content)
@@ -245,7 +244,19 @@ class RealDataIntegrationTests(unittest.TestCase):
         embedded = html_text.split(
             '<script type="application/json" id="experiment-manifest">', 1
         )[1].split("</script>", 1)[0]
-        self.assertEqual(json.loads(embedded)["config_hash"], self.state.metrics["config_hash"])
+        manifest = json.loads(embedded)
+        self.assertEqual(manifest["config_hash"], self.state.metrics["config_hash"])
+
+        def public_strings(value: object) -> list[str]:
+            if isinstance(value, dict):
+                return [text for item in value.values() for text in public_strings(item)]
+            if isinstance(value, list):
+                return [text for item in value for text in public_strings(item)]
+            return [value] if isinstance(value, str) else []
+
+        # Inspect textual fields structurally. Searching the serialized document for a
+        # numeric user ID is unsound because the same digits can occur inside a metric.
+        self.assertTrue(all("700001" not in value for value in public_strings(manifest)))
 
     def test_config_exposes_only_locked_test_users(self) -> None:
         payload = config_payload(self.state)
