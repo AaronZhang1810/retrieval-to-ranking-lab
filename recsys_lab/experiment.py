@@ -7,7 +7,7 @@ import hashlib
 import json
 import platform
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from time import perf_counter
 from typing import Any
@@ -846,8 +846,12 @@ def run_experiment(
             "movies": data.n_items,
             "ratings": data.n_ratings,
             "density": data.n_ratings / (data.n_users * data.n_items),
-            "date_start": datetime.fromtimestamp(int(all_timestamps.min()), tz=UTC).date().isoformat(),
-            "date_end": datetime.fromtimestamp(int(all_timestamps.max()), tz=UTC).date().isoformat(),
+            "date_start": datetime.fromtimestamp(
+                int(all_timestamps.min()), tz=timezone.utc
+            ).date().isoformat(),
+            "date_end": datetime.fromtimestamp(
+                int(all_timestamps.max()), tz=timezone.utc
+            ).date().isoformat(),
             "history_ratings": int(temporal.history_seen.sum()),
             "heldout_ratings": int(temporal.holdout_mask.sum()),
             "eligible_users": len(temporal.eligible_users),

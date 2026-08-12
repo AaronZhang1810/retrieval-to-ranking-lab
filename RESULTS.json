@@ -148,9 +148,9 @@
   },
   "latency": {
     "benchmark_users": 100,
-    "exact_retrieval_ms_per_user": 0.0890095898648724,
-    "incremental_ranking_ms_per_user": 0.016691660130163655,
-    "retrieval_plus_ranking_ms_per_user": 0.10570124999503605
+    "exact_retrieval_ms_per_user": 0.126585419930052,
+    "incremental_ranking_ms_per_user": 0.0,
+    "retrieval_plus_ranking_ms_per_user": 0.11691916995914653
   },
   "limitations": [
     "Offline explicit ratings are selectively observed; unrated movies are unknown, not negative feedback.",
@@ -339,10 +339,10 @@
       "recsys_lab/report.py",
       "recsys_lab/retrieval.py"
     ],
-    "source_tree_sha256": "70979671e4448c9ed8bf6050b61103d17442f0d3f0a2a0218ad40993b2d2dd8f"
+    "source_tree_sha256": "a162c070fb47791bd2e8f7196f294f2d0443878bc54a6ddeb7c90dcd2d4d4a2d"
   },
   "result_schema_version": 1,
-  "runtime_seconds": 2.775313499994809,
+  "runtime_seconds": 4.815875458996743,
   "score_zeroing_sensitivity": [
     {
       "ndcg_at_10": 0.1547591645522029,
